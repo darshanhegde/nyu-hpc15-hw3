@@ -23,6 +23,7 @@ void print_solution(double* u_k, int n){
 // Does jacobi iteration using OMP
 void jacobi_iteration(double* u_k, int N, int nthreads, int numIter){
     int i, tid, nperthread, iter;
+    int start, end;
     double first, last, u_prev, u_next;
     double a_inv = 0.5/pow((double)N+1, 2);
     double h_inv = pow((double)N+1, 2);
@@ -30,10 +31,15 @@ void jacobi_iteration(double* u_k, int N, int nthreads, int numIter){
     tid = omp_get_thread_num();
     first = 0.0;
     last = 0.0;
+    start = tid*nperthread;
+    end = (tid+1)*nperthread;
     for (iter=0; iter<numIter; iter++) {
         // perform 1 iteration of jacobi
         u_prev = first;
-        for (i=tid*nperthread; i<(tid+1)*nperthread-1; i++) {
+        if (tid == nthreads-1) {
+            end = N;
+        }
+        for (i=start; i<end-1; i++) {
             u_next = a_inv * (1+ h_inv*(u_prev+u_k[i+1]));
             u_prev = u_k[i];
             u_k[i] = u_next;
@@ -45,11 +51,11 @@ void jacobi_iteration(double* u_k, int N, int nthreads, int numIter){
             first = 0.0;
             last = u_k[nperthread];
         } else if(tid == nthreads-1){
-            first = u_k[tid*nperthread-1];
+            first = u_k[start-1];
             last = 0.0;
         } else {
-            first = u_k[tid*nperthread-1];
-            last = u_k[(tid+1)*nperthread];
+            first = u_k[start-1];
+            last = u_k[end];
         }
         // Wait for all threads to exhange values
         #pragma omp barrier
@@ -75,12 +81,6 @@ int main(int argc, char** argv){
     #pragma omp parallel
     {
         nthreads = omp_get_num_threads();
-        // check if N is divisible by nthreads, otherwise abort
-        if (!(N%nthreads == 0)) {
-            printf("N should be multiple of nthreads. \n");
-            abort();
-        }
-        
         int tid = omp_get_thread_num();
         printf("(%d) starting jacobi iteration. \n", tid);
         #pragma omp barrier
