@@ -70,7 +70,7 @@ int main(int argc, char** argv){
 
     
     if (argc != 3) {
-        printf("USAGE: ./lapace-1d <Number of points (N)> <Num Iter>\n");
+        printf("USAGE: ./jacobi-omp.o <Number of points (N)> <Num Iter>\n");
         abort();
     }
     int N = atoi(argv[1]);

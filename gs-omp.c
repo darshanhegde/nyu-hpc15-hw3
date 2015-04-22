@@ -79,7 +79,7 @@ int main(int argc, char** argv){
     timestamp_type time1, time2;
     
     if (argc != 3) {
-        printf("USAGE: ./lapace-1d <Number of points (N)> <Num Iter>\n");
+        printf("USAGE: ./gs-omp.o <Number of points (N)> <Num Iter>\n");
         abort();
     }
     int N = atoi(argv[1]);
@@ -104,7 +104,7 @@ int main(int argc, char** argv){
         }
         
         int tid = omp_get_thread_num();
-        printf("(%d) starting jacobi iteration. \n", tid);
+        printf("(%d) starting gauss-seidel iteration. \n", tid);
 #pragma omp barrier
         gauss_seidel_iteration(u_k, N, nthreads, numIter);
     }
