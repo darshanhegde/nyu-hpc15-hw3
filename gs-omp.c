@@ -8,6 +8,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "util.h"
+
 // prints out the solution
 void print_solution(double* u_k, int n){
     int i;
@@ -74,6 +76,8 @@ void gauss_seidel_iteration(double* u_k, int N, int nthreads, int numIter){
 }
 
 int main(int argc, char** argv){
+    timestamp_type time1, time2;
+    
     if (argc != 3) {
         printf("USAGE: ./lapace-1d <Number of points (N)> <Num Iter>\n");
         abort();
@@ -82,6 +86,7 @@ int main(int argc, char** argv){
     int numIter = atoi(argv[2]);
     double* u_k = (double*) malloc(N*sizeof(double));
     
+    get_timestamp(&time1);
     //Initialize u_k
     int i;
     for (i=0; i<N; i++) {
@@ -104,6 +109,10 @@ int main(int argc, char** argv){
         gauss_seidel_iteration(u_k, N, nthreads, numIter);
     }
     
-    print_solution(u_k, N);
+    get_timestamp(&time2);
+    double elapsed = timestamp_diff_in_seconds(time1,time2);
+    printf("Time elapsed is %f seconds.\n", elapsed);
+
+//    print_solution(u_k, N);
     free(u_k);
 }
