@@ -9,4 +9,4 @@
 #SBATCH --mail-type=end    # email me when the job finishes
 #SBATCH -A TG-ASC150003    # account number
 #OMP_NUM_THREADS=2
-ibrun ./jacobi-omp.o 1000 500000              # run the MPI executable
+ibrun ./jacobi-omp.o 500000 10000              # run the MPI executable
