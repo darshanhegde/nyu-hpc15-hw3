@@ -1,0 +1,15 @@
+For Jacobi Iterations:
+N	Run time(secs)
+2	12.073007 seconds.
+4	6.049854 seconds.
+8	3.059471 seconds.
+16	235.599298 seconds.
+
+
+For Gauss-Seidel Iterations:
+
+N	Run time(secs)
+2	10.986721 seconds.
+4	5.533329 seconds.
+8	2.826118 seconds.
+16	492.895767 seconds.
